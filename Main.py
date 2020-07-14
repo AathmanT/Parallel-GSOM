@@ -1,18 +1,19 @@
-import threading
+import sys
+sys.path.append('../../')
+
+import Lock
 import time
+import os
 from os.path import join
 from datetime import datetime
-import numpy as np
 
-import os
-import sys
 
-sys.path.append('../../')
 from core4.AspectLearnerGSOM import AspectLearnerGSOM
 from core4.AssociativeGSOM import AssociativeGSOM
-
+from util import display as Display_Utils
 from params import params as Params
-import Lock
+
+
 
 
 def generate_output_config(SF, forget_threshold):
@@ -37,6 +38,16 @@ def generate_output_config(SF, forget_threshold):
 
     return output_loc, output_loc_images
 
+def dispaly(gsom_nodemap, classes, name):
+    # Display
+    display = Display_Utils.Display(gsom_nodemap, None)
+    display.setup_labels_for_gsom_nodemap(classes, 2, name + ' Latent Space of {} : SF={}'.format("Data", SF),
+                                          join(output_loc, name + ' latent_space_' + str(SF) + '_hitvalues'))
+    display.setup_labels_for_gsom_nodemap(classes, 2, name + ' Latent Space of {} : SF={}'.format("Data", SF),
+                                          join(output_loc, name + ' latent_space_' + str(SF) + '_labels'))
+    print(name + ' Plotting Completed. \n')
+
+
 
 if __name__ == "__main__":
     SF = 0.83
@@ -60,9 +71,12 @@ if __name__ == "__main__":
     output_loc, output_loc_images = generate_output_config(SF, forget_threshold)
 
     X_train_emotion = Lock.emotion_feature
-    X_train_behaviour = Lock.behaviour_feature
     y_train_emotion = Lock.emotion_label
+
+    X_train_behaviour = Lock.behaviour_feature
     y_train_behaviour = Lock.behaviour_label
+
+    y_train_threat = Lock.threat_label
 
     result_dict = []
     start_time = time.time()
@@ -85,3 +99,16 @@ if __name__ == "__main__":
     EmotionGSOM.start()
     BehaviourGSOM.start()
     ThreatGSOM.start()
+
+    EmotionGSOM.join()
+    BehaviourGSOM.join()
+    ThreatGSOM.join()
+
+    print("Plotting Emotion Nodemap")
+    dispaly(EmotionGSOM.gsom_nodemap,y_train_emotion, name="Emotion")
+
+    print("Plotting Behaviour Nodemap")
+    dispaly(BehaviourGSOM.gsom_nodemap,y_train_behaviour, name="Behaviour")
+
+    print("Plotting Threat Nodemap")
+    dispaly(ThreatGSOM.gsom_nodemap,y_train_threat, name="Threat")

@@ -64,12 +64,15 @@ class Display:
             if value.get_hit_count() > 0:
                 # label_str = ','.join([str(labels[lbl_id]) for lbl_id in value.get_mapped_labels()])
                 arr = np.asarray([lbl_id for lbl_id in value.get_mapped_labels()]).astype(int)
-                n = np.argmax(np.bincount(arr))
-                plt.plot(x, y, 'o', color=listed_color[n], markersize=4)
-                unique, counts = np.unique(arr, return_counts=True)
-                count_list = dict(zip(unique, counts))
-                label_str = ', '.join("{!s}({!r})".format(key, val) for (key, val) in count_list.items())
-                plt.text(x, y + 0.3, label_str, fontsize=4)
+                if(len(arr)==0):
+                    print("node label empty")
+                else:
+                    n = np.argmax(np.bincount(arr))
+                    plt.plot(x, y, 'o', color=listed_color[n], markersize=4)
+                    unique, counts = np.unique(arr, return_counts=True)
+                    count_list = dict(zip(unique, counts))
+                    label_str = ', '.join("{!s}({!r})".format(key, val) for (key, val) in count_list.items())
+                    plt.text(x, y + 0.3, label_str, fontsize=4)
             else:
                 plt.plot(x, y, 'o', color=listed_color_map.colors[value.get_hit_count()], markersize=2)
 

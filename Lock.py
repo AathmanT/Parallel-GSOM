@@ -28,7 +28,7 @@ emotion_feature = np.random.rand(INPUT_SIZE,10)
 behaviour_feature = np.random.rand(INPUT_SIZE,10)
 emotion_label = np.random.randint(2, size=INPUT_SIZE)
 behaviour_label = np.random.randint(2, size=INPUT_SIZE)
-
+threat_label = np.random.randint(2, size=INPUT_SIZE)
 
 
 

@@ -1,16 +1,15 @@
 import math
 import numpy as np
 import copy
-import time
-
 import scipy
 import pandas as pd
 from tqdm import tqdm
+import threading
+
 from core4 import growth_handler as Growth_Handler
 from core4 import elements as Elements
 from util import utilities as Utils
 from util import display as Display_Utils
-import threading
 import Lock
 
 np.random.seed(8)
@@ -191,9 +190,9 @@ class AssociativeGSOM(threading.Thread):
             # Consume one item
 
             Lock.emo_assign_lock.acquire()
-            print("Consumer thread acquired emotion assign lock -----", k, "\n")
+            # print("Consumer thread acquired emotion assign lock -----", k, "\n")
             while k > len(Lock.emotion_assign_list) - 1:
-                print("Consumer thread waiting becoz k is greater (emo)----", k, "\n")
+                # print("Consumer thread waiting becoz k is greater (emo)----", k, "\n")
                 Lock.emo_assign_lock.notify()
 
                 Lock.emo_assign_lock.wait()
@@ -206,9 +205,9 @@ class AssociativeGSOM(threading.Thread):
             Lock.emo_assign_lock.release()
 
             Lock.behav_assign_lock.acquire()
-            print("Consumer thread acquired behavior assign lock -----", k, "\n")
+            # print("Consumer thread acquired behavior assign lock -----", k, "\n")
             while k > len(Lock.behavior_assign_list) - 1:
-                print("Consumer thread waiting becoz k is greater (behav)----", k, "\n")
+                # print("Consumer thread waiting becoz k is greater (behav)----", k, "\n")
                 Lock.behav_assign_lock.notify()
 
                 Lock.behav_assign_lock.wait()
@@ -489,3 +488,4 @@ class AssociativeGSOM(threading.Thread):
     def _get_neighbourhood_radius(self, total_iteration, iteration, max_neighbourhood_radius):
         time_constant = total_iteration / math.log(max_neighbourhood_radius)
         return max_neighbourhood_radius * math.exp(- iteration / time_constant)
+

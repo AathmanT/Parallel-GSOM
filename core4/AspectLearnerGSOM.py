@@ -1,16 +1,15 @@
 import math
 import numpy as np
 import copy
-import time
-import sys
 import scipy
 import pandas as pd
 from tqdm import tqdm
+import threading
+
 from core4 import growth_handler as Growth_Handler
 from core4 import elements as Elements
 from util import utilities as Utils
 from util import display as Display_Utils
-import threading
 import Lock
 
 np.random.seed(8)
