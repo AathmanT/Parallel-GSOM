@@ -58,6 +58,9 @@ class AssociativeGSOM(threading.Thread):
 
         self.assign_hits()
 
+    def loadWeights(self, nodemap):
+        self.gsom_nodemap = nodemap
+
     def grow(self):
 
         self._initialize_network(self.dimensions)
@@ -347,6 +350,21 @@ class AssociativeGSOM(threading.Thread):
             node_index = Utils.Utilities.generate_index(winner.x, winner.y)
             y_pred.append(winner.get_mapped_labels())
         return y_pred
+
+        # return predictions and weights
+        def predict_x(self, X_test):
+            y_pred = []
+            weights = []
+
+            gsom_nodemap = copy.deepcopy(self.gsom_nodemap)
+            for cur_input in X_test:
+                winner = Utils.Utilities.select_winner(gsom_nodemap, np.array([cur_input]))
+                node_index = Utils.Utilities.generate_index(winner.x, winner.y)
+                y_pred.append(winner.get_mapped_labels())
+                weights.append(winner.recurrent_weights)
+
+            return y_pred, weights
+
 
     def _smooth_for_single_iteration_and_single_input(self, input_vector, learning_rate, neigh_radius):
 
