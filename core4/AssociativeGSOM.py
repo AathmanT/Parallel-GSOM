@@ -4,6 +4,7 @@ import copy
 import scipy
 import pandas as pd
 from tqdm import tqdm
+from os.path import join
 import threading
 
 from core4 import growth_handler as Growth_Handler
@@ -101,9 +102,9 @@ class AssociativeGSOM(threading.Thread):
                 Lock.emo_lock.release()
 
                 Lock.behav_lock.acquire()
-                # print("Consumer thread acquired behavior lock -----", k, "\n")
+                print("Consumer thread acquired behavior lock -----", k, "\n")
                 while k > len(Lock.behavior_feature_list) - 1:
-                    # print("Consumer thread waiting becoz k is greater (behav)----", k, "\n")
+                    print("Consumer thread waiting becoz k is greater (behav)----", k, "\n")
                     Lock.behav_lock.notify()
 
                     Lock.behav_lock.wait()
@@ -114,7 +115,7 @@ class AssociativeGSOM(threading.Thread):
                 Lock.behav_lock.notify()
                 Lock.behav_lock.release()
 
-                data = np.hstack((emotion, behaviour))
+                data = np.hstack((emotion[0], behaviour[0]))
                 grow_in(data, learning_rate, neighbourhood_radius)
 
             # Remove all the nodes above the age threshold
@@ -144,9 +145,9 @@ class AssociativeGSOM(threading.Thread):
                 # Consume one item
 
                 Lock.emo_smooth_lock.acquire()
-                # print("Consumer thread acquired emotion smoothing lock -----", k, "\n")
+                print("Consumer thread acquired emotion smoothing lock -----", k, "\n")
                 while k > len(Lock.emotion_smooth_list) - 1:
-                    # print("Consumer thread waiting becoz k is greater (emo)----", k, "\n")
+                    print("Consumer thread waiting becoz k is greater (emo)----", k, "\n")
                     Lock.emo_smooth_lock.notify()
 
                     Lock.emo_smooth_lock.wait()
@@ -159,9 +160,9 @@ class AssociativeGSOM(threading.Thread):
                 Lock.emo_smooth_lock.release()
 
                 Lock.behav_smooth_lock.acquire()
-                # print("Consumer thread acquired behavior smoothing lock -----", k, "\n")
+                print("Consumer thread acquired behavior smoothing lock -----", k, "\n")
                 while k > len(Lock.behavior_smooth_list) - 1:
-                    # print("Consumer thread waiting becoz k is greater (behav)----", k, "\n")
+                    print("Consumer thread waiting becoz k is greater (behav)----", k, "\n")
                     Lock.behav_smooth_lock.notify()
 
                     Lock.behav_smooth_lock.wait()
@@ -172,7 +173,7 @@ class AssociativeGSOM(threading.Thread):
                 Lock.behav_smooth_lock.notify()
                 Lock.behav_smooth_lock.release()
 
-                smoothing_data = np.hstack((emotion, behaviour))
+                smoothing_data = np.hstack((emotion[0], behaviour[0]))
 
                 smooth(smoothing_data, learning_rate, neighbourhood_radius)
 
@@ -221,8 +222,8 @@ class AssociativeGSOM(threading.Thread):
             Lock.behav_assign_lock.notify()
             Lock.behav_assign_lock.release()
 
-            assign_data = np.hstack((emotion, behaviour))
-
+            assign_data = np.hstack((emotion[0], behaviour[0]))
+            Lock.final_list.insert(k,assign_data)
 
             self.globalContexts[0] = assign_data
 
@@ -249,38 +250,39 @@ class AssociativeGSOM(threading.Thread):
     This function to be called for a separate dataset, to evaluate the hit nodes.
     """
 
-    def evaluate_hits(self):
-
-        param = self.parameters
-        gsom_nodemap = copy.deepcopy(self.gsom_nodemap)
-        curr_count = 0
-
-        for cur_input in inputs:
-
-            self.globalContexts_evaluation[0] = cur_input
-
-            # Update global context
-            for z in range(1, param.NUMBER_OF_TEMPORAL_CONTEXTS):
-                self.globalContexts_evaluation[z] = (param.BETA * self.previousBMU_evaluation[0, z]) + (
-                            (1 - param.BETA) * self.previousBMU_evaluation[0, z - 1])
-
-            winner = Utils.Utilities.select_winner_recurrent(gsom_nodemap, self.globalContexts_evaluation, self.alphas)
-            winner.hit()
-
-            # Recurrent learning set previous BMU
-            self.previousBMU_evaluation[0] = winner.recurrent_weights
-
-            node_index = Utils.Utilities.generate_index(winner.x, winner.y)
-            gsom_nodemap[node_index].map_label(curr_count)
-            curr_count += 1
-
-        # return the finalized map
-        return gsom_nodemap
+    # def evaluate_hits(self):
+    #
+    #     param = self.parameters
+    #     gsom_nodemap = copy.deepcopy(self.gsom_nodemap)
+    #     curr_count = 0
+    #
+    #     for cur_input in inputs:
+    #
+    #         self.globalContexts_evaluation[0] = cur_input
+    #
+    #         # Update global context
+    #         for z in range(1, param.NUMBER_OF_TEMPORAL_CONTEXTS):
+    #             self.globalContexts_evaluation[z] = (param.BETA * self.previousBMU_evaluation[0, z]) + (
+    #                         (1 - param.BETA) * self.previousBMU_evaluation[0, z - 1])
+    #
+    #         winner = Utils.Utilities.select_winner_recurrent(gsom_nodemap, self.globalContexts_evaluation, self.alphas)
+    #         winner.hit()
+    #
+    #         # Recurrent learning set previous BMU
+    #         self.previousBMU_evaluation[0] = winner.recurrent_weights
+    #
+    #         node_index = Utils.Utilities.generate_index(winner.x, winner.y)
+    #         gsom_nodemap[node_index].map_label(curr_count)
+    #         curr_count += 1
+    #
+    #     # return the finalized map
+    #     return gsom_nodemap
 
     def finalize_gsom_label(self):
         # all_coordinates = self.node_labels.iloc[:, 4:]
         # all_coordinates = all_coordinates.astype(int)
         results = []
+        # combined_data = np.hstack((Lock.emotion_assign_list, Lock.behavior_assign_list))
         removable_indexes = []
         for key, value in self.gsom_nodemap.items():
             key_split = key.split(':')
@@ -308,7 +310,7 @@ class AssociativeGSOM(threading.Thread):
                     X_weights = []
                     label_indexes = value.get_mapped_labels_indexes()
                     for i in label_indexes:
-                        X_weight = inputs[i, :]
+                        X_weight = Lock.final_list[i, :]
                         # np.append(cripkeu,sdgg,axis=0)
                         X_weights.append(X_weight)
                     X_weights = np.asarray(X_weights)

@@ -1,4 +1,5 @@
 import sys
+
 sys.path.append('../../')
 
 import Lock
@@ -6,14 +7,12 @@ import time
 import os
 from os.path import join
 from datetime import datetime
-
+from util import utilities as Utils
 
 from core4.AspectLearnerGSOM import AspectLearnerGSOM
 from core4.AssociativeGSOM import AssociativeGSOM
 from util import display as Display_Utils
 from params import params as Params
-
-
 
 
 def generate_output_config(SF, forget_threshold):
@@ -38,6 +37,7 @@ def generate_output_config(SF, forget_threshold):
 
     return output_loc, output_loc_images
 
+
 def dispaly(gsom_nodemap, classes, name):
     # Display
     display = Display_Utils.Display(gsom_nodemap, None)
@@ -46,7 +46,6 @@ def dispaly(gsom_nodemap, classes, name):
     display.setup_labels_for_gsom_nodemap(classes, 2, name + ' Latent Space of {} : SF={}'.format("Data", SF),
                                           join(output_loc, name + ' latent_space_' + str(SF) + '_labels'))
     print(name + ' Plotting Completed. \n')
-
 
 
 if __name__ == "__main__":
@@ -78,6 +77,14 @@ if __name__ == "__main__":
 
     y_train_threat = Lock.threat_label
 
+    print("Emotion feature is ", X_train_emotion.shape)
+    print("Emotion label is ", y_train_emotion.shape)
+
+    print("Behavior feature is ", X_train_behaviour.shape)
+    print("Behavior label is ", y_train_behaviour.shape)
+
+    print("Thread level label is ", y_train_threat.shape)
+
     result_dict = []
     start_time = time.time()
 
@@ -105,10 +112,25 @@ if __name__ == "__main__":
     ThreatGSOM.join()
 
     print("Plotting Emotion Nodemap")
-    dispaly(EmotionGSOM.gsom_nodemap,y_train_emotion, name="Emotion")
+    dispaly(EmotionGSOM.gsom_nodemap, y_train_emotion, name="Emotion")
 
     print("Plotting Behaviour Nodemap")
-    dispaly(BehaviourGSOM.gsom_nodemap,y_train_behaviour, name="Behaviour")
+    dispaly(BehaviourGSOM.gsom_nodemap, y_train_behaviour, name="Behaviour")
 
     print("Plotting Threat Nodemap")
-    dispaly(ThreatGSOM.gsom_nodemap,y_train_threat, name="Threat")
+    dispaly(ThreatGSOM.gsom_nodemap, y_train_threat, name="Threat")
+
+    print("Saving Emotion Nodemap")
+    EmotionGSOM.finalize_gsom_label()
+    Utils.Utilities.save_object(result_dict,
+                                join(EmotionGSOM.output_save_location, 'emotion-gsom_nodemap_SF-{}'.format(SF)))
+
+    print("Saving Behavior Nodemap")
+    BehaviourGSOM.finalize_gsom_label()
+    Utils.Utilities.save_object(result_dict,
+                                join(BehaviourGSOM.output_save_location, 'behavior-gsom_nodemap_SF-{}'.format(SF)))
+
+    print("Saving Threat Nodemap")
+    ThreatGSOM.finalize_gsom_label()
+    Utils.Utilities.save_object(result_dict,
+                                join(ThreatGSOM.output_save_location, 'threat-gsom_nodemap_SF-{}'.format(SF)))

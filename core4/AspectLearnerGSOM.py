@@ -4,6 +4,7 @@ import copy
 import scipy
 import pandas as pd
 from tqdm import tqdm
+from os.path import join
 import threading
 
 from core4 import growth_handler as Growth_Handler
@@ -68,13 +69,14 @@ class AspectLearnerGSOM(threading.Thread):
 
             for k in range(0, len(self.inputs)):
                 # Produce one item
+                a = self.inputs[k]
                 weights = grow_in(self.inputs[k], learning_rate, neighbourhood_radius)
                 if self.type == "emotion":
                     Lock.emo_lock.acquire()
                     # print(self.type, "thread acquired emo lock----", k, "\n")
                     Lock.emotion_feature_list.insert(k, weights)
                     while (len(Lock.emotion_feature_list) == len(self.inputs)):
-                        # print("emotion thread waiting becoz array is full ----", k, "\n")
+                        print("emotion thread waiting becoz array is full ----", k, "\n")
                         # Notify & Wake consumer
                         Lock.emo_lock.notify()
                         Lock.emo_lock.wait()
@@ -87,10 +89,10 @@ class AspectLearnerGSOM(threading.Thread):
 
                 elif self.type == "behaviour":
                     Lock.behav_lock.acquire()
-                    # print(self.type, "thread acquired behav lock----", k, "\n")
+                    print(self.type, "thread acquired behav lock----", k, "\n")
                     Lock.behavior_feature_list.insert(k, weights)
                     while (len(Lock.behavior_feature_list) == len(self.inputs)):
-                        # print("behaviour thread waiting becoz array is full ----", k, "\n")
+                        print("behaviour thread waiting becoz array is full ----", k, "\n")
                         Lock.behav_lock.notify()
                         Lock.behav_lock.wait()
 
@@ -123,7 +125,6 @@ class AspectLearnerGSOM(threading.Thread):
 
             for k in range(0, len(self.inputs)):  # No need of random sampling
                 # Produce one item
-
                 smooth_weights = smooth(self.inputs[k], learning_rate, neighbourhood_radius)
                 if self.type == "emotion":
                     Lock.emo_smooth_lock.acquire()

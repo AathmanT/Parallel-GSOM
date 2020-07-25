@@ -74,9 +74,10 @@ class Display:
                     label_str = ', '.join("{!s}({!r})".format(key, val) for (key, val) in count_list.items())
                     plt.text(x, y + 0.3, label_str, fontsize=4)
             else:
-                plt.plot(x, y, 'o', color=listed_color_map.colors[value.get_hit_count()], markersize=2)
+                plt.plot(x, y, 'o', color=listed_color_map.colors[value.get_hit_count()], markersize=4)
 
         plt.savefig(output_filename + '.jpeg', dpi=1200)
+        plt.clf()
 
     def setup_heatmap_for_gsom_nodemap_adl_activity(self, labels, title, output_filename):
 
