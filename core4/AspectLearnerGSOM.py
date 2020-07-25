@@ -76,7 +76,7 @@ class AspectLearnerGSOM(threading.Thread):
                     # print(self.type, "thread acquired emo lock----", k, "\n")
                     Lock.emotion_feature_list.insert(k, weights)
                     while (len(Lock.emotion_feature_list) == len(self.inputs)):
-                        print("emotion thread waiting becoz array is full ----", k, "\n")
+                        # print("emotion thread waiting becoz array is full ----", k, "\n")
                         # Notify & Wake consumer
                         Lock.emo_lock.notify()
                         Lock.emo_lock.wait()
@@ -89,10 +89,10 @@ class AspectLearnerGSOM(threading.Thread):
 
                 elif self.type == "behaviour":
                     Lock.behav_lock.acquire()
-                    print(self.type, "thread acquired behav lock----", k, "\n")
+                    # print(self.type, "thread acquired behav lock----", k, "\n")
                     Lock.behavior_feature_list.insert(k, weights)
                     while (len(Lock.behavior_feature_list) == len(self.inputs)):
-                        print("behaviour thread waiting becoz array is full ----", k, "\n")
+                        # print("behaviour thread waiting becoz array is full ----", k, "\n")
                         Lock.behav_lock.notify()
                         Lock.behav_lock.wait()
 
@@ -185,10 +185,10 @@ class AspectLearnerGSOM(threading.Thread):
 
             if self.type == "emotion":
                 Lock.emo_assign_lock.acquire()
-                print(self.type, "thread acquired emo assign lock----", curr_count, "\n")
+                # print(self.type, "thread acquired emo assign lock----", curr_count, "\n")
                 Lock.emotion_assign_list.insert(curr_count, self.previousBMU[0])
                 if (len(Lock.emotion_assign_list) == len(self.inputs)):
-                    print("emotion thread exiting becoz array is full ----", curr_count, "\n")
+                    # print("emotion thread exiting becoz array is full ----", curr_count, "\n")
                     # Lock.emo_assign_lock.wait()
                     Lock.emo_assign_lock.notify()
                     Lock.emo_assign_lock.release()
@@ -202,10 +202,10 @@ class AspectLearnerGSOM(threading.Thread):
 
             elif self.type == "behaviour":
                 Lock.behav_assign_lock.acquire()
-                print(self.type, "thread acquired behav assign lock----", curr_count, "\n")
+                # print(self.type, "thread acquired behav assign lock----", curr_count, "\n")
                 Lock.behavior_assign_list.insert(curr_count, self.previousBMU[0])
                 if (len(Lock.behavior_assign_list) == len(self.inputs)):
-                    print("behaviour thread exiting becoz array is full ----", curr_count, "\n")
+                    # print("behaviour thread exiting becoz array is full ----", curr_count, "\n")
                     # Lock.behav_assign_lock.wait()
                     Lock.behav_assign_lock.notify()
                     Lock.behav_assign_lock.release()

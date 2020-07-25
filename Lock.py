@@ -24,6 +24,14 @@ emotion_assign_list = []
 behavior_assign_list = []
 
 final_list = []
+
+INPUT_SIZE = 3800
+
+emotion_feature = np.load("/content/drive/My Drive/Dataset/FEATURES/emotion.npy")
+behaviour_feature = np.load("/content/drive/My Drive/Dataset/FEATURES/behavior.npy")
+emotion_label = np.load("/content/drive/My Drive/Dataset/FEATURES/per_epoch_y_array.npy")
+behaviour_label = np.load("/content/drive/My Drive/Dataset/FEATURES/per_epoch_y_array.npy")
+threat_label = np.load("/content/drive/My Drive/Dataset/FEATURES/per_epoch_y_array.npy")
 # INPUT_SIZE = 50
 
 # emotion_feature = np.random.rand(INPUT_SIZE,10)
@@ -33,14 +41,14 @@ final_list = []
 # threat_label = np.random.randint(2, size=INPUT_SIZE)
 
 
-data = pd.read_csv("data/zoo-mini.csv")
-label = data.iloc[:,-1].values
-data = data.iloc[:,1:-1].values
-
-emotion_feature = data[:,:8]
-behaviour_feature = data[:,8:]
-emotion_label = label
-behaviour_label = label
-threat_label = label
-
-INPUT_SIZE = data.shape[0]
+# data = pd.read_csv("data/zoo-mini.csv")
+# label = data.iloc[:,-1].values
+# data = data.iloc[:,1:-1].values
+#
+# emotion_feature = data[:,:8]
+# behaviour_feature = data[:,8:]
+# emotion_label = label
+# behaviour_label = label
+# threat_label = label
+#
+# INPUT_SIZE = data.shape[0]

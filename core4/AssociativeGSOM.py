@@ -102,9 +102,9 @@ class AssociativeGSOM(threading.Thread):
                 Lock.emo_lock.release()
 
                 Lock.behav_lock.acquire()
-                print("Consumer thread acquired behavior lock -----", k, "\n")
+                # print("Consumer thread acquired behavior lock -----", k, "\n")
                 while k > len(Lock.behavior_feature_list) - 1:
-                    print("Consumer thread waiting becoz k is greater (behav)----", k, "\n")
+                    # print("Consumer thread waiting becoz k is greater (behav)----", k, "\n")
                     Lock.behav_lock.notify()
 
                     Lock.behav_lock.wait()
@@ -145,9 +145,9 @@ class AssociativeGSOM(threading.Thread):
                 # Consume one item
 
                 Lock.emo_smooth_lock.acquire()
-                print("Consumer thread acquired emotion smoothing lock -----", k, "\n")
+                # print("Consumer thread acquired emotion smoothing lock -----", k, "\n")
                 while k > len(Lock.emotion_smooth_list) - 1:
-                    print("Consumer thread waiting becoz k is greater (emo)----", k, "\n")
+                    # print("Consumer thread waiting becoz k is greater (emo)----", k, "\n")
                     Lock.emo_smooth_lock.notify()
 
                     Lock.emo_smooth_lock.wait()
@@ -160,9 +160,9 @@ class AssociativeGSOM(threading.Thread):
                 Lock.emo_smooth_lock.release()
 
                 Lock.behav_smooth_lock.acquire()
-                print("Consumer thread acquired behavior smoothing lock -----", k, "\n")
+                # print("Consumer thread acquired behavior smoothing lock -----", k, "\n")
                 while k > len(Lock.behavior_smooth_list) - 1:
-                    print("Consumer thread waiting becoz k is greater (behav)----", k, "\n")
+                    # print("Consumer thread waiting becoz k is greater (behav)----", k, "\n")
                     Lock.behav_smooth_lock.notify()
 
                     Lock.behav_smooth_lock.wait()
