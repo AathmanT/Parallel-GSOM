@@ -310,7 +310,7 @@ class AssociativeGSOM(threading.Thread):
                     X_weights = []
                     label_indexes = value.get_mapped_labels_indexes()
                     for i in label_indexes:
-                        X_weight = Lock.final_list[i, ]
+                        X_weight = Lock.final_list[i]
                         # np.append(cripkeu,sdgg,axis=0)
                         X_weights.append(X_weight)
                     X_weights = np.asarray(X_weights)
