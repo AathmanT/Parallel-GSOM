@@ -294,35 +294,37 @@ class AssociativeGSOM(threading.Thread):
                 count_1 = 0
 
                 labels = value.get_mapped_labels()
+                if ((np.asarray(labels).shape[0])>0):
+                    # f_label = max(set(labels), key=labels.count)
+                    df = pd.DataFrame({'Number': labels})
+                    # df = df.astype('int32')
+                    # hello = df['Number'].value_counts()
+                    max_occurances = df['Number'].mode()
 
-                # f_label = max(set(labels), key=labels.count)
-                df = pd.DataFrame({'Number': labels})
-                # df = df.astype('int32')
-                hello = df['Number'].value_counts()
-                max_occurances = df['Number'].mode()
+                    if (len(max_occurances) == 1):
+                        f_label = max_occurances[0]
+                        self.gsom_nodemap[key].change_label(f_label)
 
-                if (len(max_occurances) == 1):
-                    f_label = max_occurances[0]
-                    self.gsom_nodemap[key].change_label(f_label)
+                    else:
+                        # cripkeu=np.empty((len(value.get_mapped_labels_indexes()),55))
+                        X_weights = []
+                        label_indexes = value.get_mapped_labels_indexes()
+                        for i in label_indexes:
+                            X_weight = [Lock.final_list[i]]
+                            # np.append(cripkeu,sdgg,axis=0)
+                            X_weights.append(X_weight)
+                        X_weights = np.asarray(X_weights)
+                        neutral_node = value.recurrent_weights.reshape(1, value.dimensions)
+                        out = scipy.spatial.distance.cdist(X_weights, neutral_node, 'euclidean')
 
+                        nearest_index = out.argmin()
+                        nearest_neighbor_index = label_indexes[nearest_index]
+                        nearest_neighbor = self.activity_classes[nearest_neighbor_index]
+
+                        self.gsom_nodemap[key].change_label(nearest_neighbor)
+                        # neutral_indexes.append(key)
                 else:
-                    # cripkeu=np.empty((len(value.get_mapped_labels_indexes()),55))
-                    X_weights = []
-                    label_indexes = value.get_mapped_labels_indexes()
-                    for i in label_indexes:
-                        X_weight = Lock.final_list[i]
-                        # np.append(cripkeu,sdgg,axis=0)
-                        X_weights.append(X_weight)
-                    X_weights = np.asarray(X_weights)
-                    neutral_node = value.recurrent_weights.reshape(1, value.dimensions)
-                    out = scipy.spatial.distance.cdist(X_weights, neutral_node, 'euclidean')
-
-                    nearest_index = out.argmin()
-                    nearest_neighbor_index = label_indexes[nearest_index]
-                    nearest_neighbor = self.activity_classes[nearest_neighbor_index]
-
-                    self.gsom_nodemap[key].change_label(nearest_neighbor)
-                    # neutral_indexes.append(key)
+                    removable_indexes.append(key)
             else:
                 removable_indexes.append(key)
         # print(neutral_indexes)

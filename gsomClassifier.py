@@ -138,49 +138,49 @@ class GSOMClassifier():
 ##### Loading data ########
 ###########################
 
-X = np.load('data/casme_train2.npy')
-y = np.load('data/casme_train_label2.npy')
-X_test = np.load('data/casme_test2.npy')
-y_test = np.load('data/casme_test_label2.npy')
-
-###### SCALING #########
-scaler = MinMaxScaler()
-X = scaler.fit_transform(X)
-X_test = scaler.fit_transform(X_test)
-
-###### GSOM ############
-gsom = GSOMClassifier()
-result_dict, classes = gsom.fit(X, y)
-gsom.dispaly(result_dict, classes)
-###### Save model ########
-gsom.save()
-y_pred = gsom.predict(X_test)
-
-###### Calculate accuracy ###########
-mat = confusion_matrix(y_test, y_pred)
-print (mat)
-k = 0
-for i in range (len(mat)):
-    k = k + mat[i][i]
-acc = k/len(y_test)*100
-print("Accuracy  :   ", acc)
+# X = np.load('data/casme_train2.npy')
+# y = np.load('data/casme_train_label2.npy')
+# X_test = np.load('data/casme_test2.npy')
+# y_test = np.load('data/casme_test_label2.npy')
+#
+# ###### SCALING #########
+# scaler = MinMaxScaler()
+# X = scaler.fit_transform(X)
+# X_test = scaler.fit_transform(X_test)
+#
+# ###### GSOM ############
+# gsom = GSOMClassifier()
+# result_dict, classes = gsom.fit(X, y)
+# gsom.dispaly(result_dict, classes)
+# ###### Save model ########
+# gsom.save()
+# y_pred = gsom.predict(X_test)
+#
+# ###### Calculate accuracy ###########
+# mat = confusion_matrix(y_test, y_pred)
+# print (mat)
+# k = 0
+# for i in range (len(mat)):
+#     k = k + mat[i][i]
+# acc = k/len(y_test)*100
+# print("Accuracy  :   ", acc)
 
 
 ###############
 ### DEMO ######
 ###############
 
-df = pd.read_csv('data/zoo-mini.csv')
-X = df.iloc[:, 1:-1].values
-y = df.iloc[:, -1].values
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
-gsom = GSOMClassifier()
-results, classes = gsom.fit(X_train, y_train)
-gsom.dispaly(results, classes)
-gsom.save()
-y_pred = gsom.predict(X_test)
-print(y_pred)
-
+# df = pd.read_csv('data/zoo-mini.csv')
+# X = df.iloc[:, 1:-1].values
+# y = df.iloc[:, -1].values
+# X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
+# gsom = GSOMClassifier()
+# results, classes = gsom.fit(X_train, y_train)
+# gsom.dispaly(results, classes)
+# gsom.save()
+# y_pred = gsom.predict(X_test)
+# print(y_pred)
+#
 
 ################################
 ## Load from existing model ####
@@ -191,5 +191,5 @@ pickle_in = open(
     "rb")
 dict_map = pickle.load(pickle_in)
 node_map = dict_map[0].get('gsom')
-y_pred = gsom.predict_x(X_test, node_map)
-print(y_pred)
+# y_pred = gsom.predict_x(X_test, node_map)
+# print(y_pred)

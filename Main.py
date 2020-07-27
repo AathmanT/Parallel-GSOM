@@ -1,7 +1,7 @@
 import sys
 
 sys.path.append('../../')
-
+import numpy as np
 import Lock
 import time
 import os
@@ -85,7 +85,14 @@ if __name__ == "__main__":
 
     print("Thread level label is ", y_train_threat.shape)
 
-    result_dict = []
+    emotion_result_dict = []
+    behavior_result_dict = []
+    threat_result_dict = []
+
+    final_emotion_result_dict = []
+    final_behavior_result_dict = []
+    final_threat_result_dict = []
+
     start_time = time.time()
 
     EmotionGSOM = AspectLearnerGSOM(generalise_params.get_gsom_parameters(), "emotion", X_train_emotion,
@@ -121,16 +128,73 @@ if __name__ == "__main__":
     dispaly(ThreatGSOM.gsom_nodemap, y_train_threat, name="Threat")
 
     print("Saving Emotion Nodemap")
-    EmotionGSOM.finalize_gsom_label()
-    Utils.Utilities.save_object(result_dict,
+    emotion_result_dict.append({
+        'gsom': EmotionGSOM.gsom_nodemap,
+        'aggregated': None
+    })
+    Utils.Utilities.save_object(emotion_result_dict,
                                 join(EmotionGSOM.output_save_location, 'emotion-gsom_nodemap_SF-{}'.format(SF)))
 
     print("Saving Behavior Nodemap")
-    BehaviourGSOM.finalize_gsom_label()
-    Utils.Utilities.save_object(result_dict,
+    behavior_result_dict.append({
+        'gsom': EmotionGSOM.gsom_nodemap,
+        'aggregated': None
+    })
+    Utils.Utilities.save_object(behavior_result_dict,
                                 join(BehaviourGSOM.output_save_location, 'behavior-gsom_nodemap_SF-{}'.format(SF)))
 
     print("Saving Threat Nodemap")
-    ThreatGSOM.finalize_gsom_label()
-    Utils.Utilities.save_object(result_dict,
+    threat_result_dict.append({
+        'gsom': EmotionGSOM.gsom_nodemap,
+        'aggregated': None
+    })
+    Utils.Utilities.save_object(threat_result_dict,
                                 join(ThreatGSOM.output_save_location, 'threat-gsom_nodemap_SF-{}'.format(SF)))
+
+    print("Saving finalized emotion nodemap")
+    EmotionGSOM.finalize_gsom_label()
+    final_emotion_result_dict.append({
+        'gsom': EmotionGSOM.gsom_nodemap,
+        'aggregated': None
+    })
+    Utils.Utilities.save_object(final_emotion_result_dict,
+                                join(EmotionGSOM.output_save_location, 'final-emotion-gsom_nodemap_SF-{}'.format(SF)))
+
+    print("Saving finalized behavior nodemap")
+    BehaviourGSOM.finalize_gsom_label()
+    final_behavior_result_dict.append({
+        'gsom': EmotionGSOM.gsom_nodemap,
+        'aggregated': None
+    })
+    Utils.Utilities.save_object(final_behavior_result_dict,
+                                join(EmotionGSOM.output_save_location, 'final-threat-gsom_nodemap_SF-{}'.format(SF)))
+
+    print("Saving finalized threat nodemap")
+    ThreatGSOM.finalize_gsom_label()
+    final_threat_result_dict.append({
+        'gsom': EmotionGSOM.gsom_nodemap,
+        'aggregated': None
+    })
+    Utils.Utilities.save_object(final_threat_result_dict,
+                                join(ThreatGSOM.output_save_location, 'final-threat-gsom_nodemap_SF-{}'.format(SF)))
+
+
+
+
+
+    # label = np.load("data/behavior_label.npy")
+    # emotion_label = np.where(label==5, 0, label)
+    # emotion_label = np.where(label==6, 5, label)
+    # emotion_label = np.where(label==7, 5, label)
+    #
+    # threat_label = np.where(label == 1, 9, label)
+    # threat_label = np.where(label == 4, 1, label)
+    # threat_label = np.where(label == 2, 4, label)
+    # threat_label = np.where(label == 3, 2, label)
+    # threat_label = np.where(label == 9, 3, label)
+    # threat_label = np.where(label == 6, 3, label)
+    # threat_label = np.where(label == 7, 3, label)
+    # threat_label = np.where(label == 0, 5, label)
+    #
+    # np.save("data/emotion_label.npy", emotion_label)
+    # np.save("data/threat_label.npy", threat_label)
