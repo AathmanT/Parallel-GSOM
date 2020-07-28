@@ -36,7 +36,7 @@ threat_label = np.load("/content/drive/My Drive/Dataset/FEATURES/threat_label.np
 
 
 # PC
-# emotion_feature = np.load("data/emotion.npy")
+# emotion_feature = np.load("data/behavior.npy")
 # behaviour_feature = np.load("data/behavior.npy")
 # emotion_label = np.load("data/emotion_label.npy")
 # behaviour_label = np.load("data/behavior_label.npy")
