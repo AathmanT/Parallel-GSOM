@@ -137,7 +137,7 @@ if __name__ == "__main__":
 
     print("Saving Behavior Nodemap")
     behavior_result_dict.append({
-        'gsom': EmotionGSOM.gsom_nodemap,
+        'gsom': BehaviourGSOM.gsom_nodemap,
         'aggregated': None
     })
     Utils.Utilities.save_object(behavior_result_dict,
@@ -145,7 +145,7 @@ if __name__ == "__main__":
 
     print("Saving Threat Nodemap")
     threat_result_dict.append({
-        'gsom': EmotionGSOM.gsom_nodemap,
+        'gsom': ThreatGSOM.gsom_nodemap,
         'aggregated': None
     })
     Utils.Utilities.save_object(threat_result_dict,
@@ -163,16 +163,16 @@ if __name__ == "__main__":
     print("Saving finalized behavior nodemap")
     BehaviourGSOM.finalize_gsom_label()
     final_behavior_result_dict.append({
-        'gsom': EmotionGSOM.gsom_nodemap,
+        'gsom': BehaviourGSOM.gsom_nodemap,
         'aggregated': None
     })
     Utils.Utilities.save_object(final_behavior_result_dict,
-                                join(EmotionGSOM.output_save_location, 'final-threat-gsom_nodemap_SF-{}'.format(SF)))
+                                join(BehaviourGSOM.output_save_location, 'final-behavior-gsom_nodemap_SF-{}'.format(SF)))
 
     print("Saving finalized threat nodemap")
     ThreatGSOM.finalize_gsom_label()
     final_threat_result_dict.append({
-        'gsom': EmotionGSOM.gsom_nodemap,
+        'gsom': ThreatGSOM.gsom_nodemap,
         'aggregated': None
     })
     Utils.Utilities.save_object(final_threat_result_dict,
