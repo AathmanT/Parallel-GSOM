@@ -191,7 +191,7 @@ if __name__ == "__main__":
     pred_emotion, generalise_emotion_features = EmotionGSOM.predict_x(X_test_emotion)
     pred_behavior, generalise_behavior_features = BehaviourGSOM.predict_x(X_test_behaviour)
     
-    generalised_features = np.hstack(generalise_emotion_features, generalise_behavior_features)
+    generalised_features = np.hstack((np.asarray(generalise_emotion_features), np.asarray(generalise_behavior_features)))
     y_pred = ThreatGSOM.predict(generalised_features)
     ###### Calculate accuracy ###########
     mat = confusion_matrix(y_test_threat, y_pred)
