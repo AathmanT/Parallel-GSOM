@@ -28,13 +28,17 @@ final_list = []
 INPUT_SIZE = 3800
 
 # Colab
-emotion_feature = np.load("/content/drive/My Drive/Dataset/FEATURES/emotion.npy")
-behaviour_feature = np.load("/content/drive/My Drive/Dataset/FEATURES/behavior.npy")
-emotion_label = np.load("/content/drive/My Drive/Dataset/FEATURES/emotion_label.npy")
-behaviour_label = np.load("/content/drive/My Drive/Dataset/FEATURES/behavior_label.npy")
-threat_label = np.load("/content/drive/My Drive/Dataset/FEATURES/threat_label.npy")
+emotion_feature = np.load("/content/drive/My Drive/Dataset/FEATURES/Train_features/emotion.npy")
+behaviour_feature = np.load("/content/drive/My Drive/Dataset/FEATURES/Train_features/behavior.npy")
+emotion_label = np.load("/content/drive/My Drive/Dataset/FEATURES/Train_features/emotion_label.npy")
+behaviour_label = np.load("/content/drive/My Drive/Dataset/FEATURES/Train_features/behavior_label.npy")
+threat_label = np.load("/content/drive/My Drive/Dataset/FEATURES/Train_features/threat_label.npy")
 
-
+test_behaviour_feature = np.load("/content/drive/My Drive/Dataset/FEATURES/Test_features/test_behavior.npy")
+test_behaviour_label = np.load("/content/drive/My Drive/Dataset/FEATURES/Test_features/test_behavior_labels.npy")
+test_emotion_feature = np.load("/content/drive/My Drive/Dataset/FEATURES/Test_features/test_emotion.npy")
+test_emotion_label = np.load("/content/drive/My Drive/Dataset/FEATURES/Test_features/test_emotion_labels.npy")
+test_threat_label = np.load("/content/drive/My Drive/Dataset/FEATURES/Test_features/test_threat_labels.npy")
 # PC
 # emotion_feature = np.load("data/behavior.npy")
 # behaviour_feature = np.load("data/behavior.npy")
