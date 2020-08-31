@@ -189,7 +189,7 @@ if __name__ == "__main__":
 
     # Test Behavior data
     pred_emotion, generalise_emotion_features = EmotionGSOM.predict_x(X_test_emotion)
-    pred_behavior, generalise_behavior_features = BehaviourGSOM.predict_x(X_test_emotion)
+    pred_behavior, generalise_behavior_features = BehaviourGSOM.predict_x(X_test_behaviour)
     
     generalised_features = np.hstack(generalise_emotion_features, generalise_behavior_features)
     y_pred = ThreatGSOM.predict(generalised_features)
