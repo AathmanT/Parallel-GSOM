@@ -76,6 +76,14 @@ if __name__ == "__main__":
     y_train_behaviour = Lock.behaviour_label
 
     y_train_threat = Lock.threat_label
+    
+    X_test_behaviour = Lock.test_behaviour_feature
+    y_test_behaviour = Lock.test_behaviour_label
+
+    X_test_emotion = Lock.test_emotion_feature
+    y_test_emotion = Lock.test_emotion_label
+
+    y_test_threat = Lock.test_threat_label
 
     print("Emotion feature is ", X_train_emotion.shape)
     print("Emotion label is ", y_train_emotion.shape)
@@ -108,7 +116,7 @@ if __name__ == "__main__":
     ThreatGSOM = AssociativeGSOM(generalise_params.get_gsom_parameters(),
                                  X_train_emotion.shape[1] + X_train_behaviour.shape[1],
                                  plot_for_itr=plot_for_itr,
-                                 activity_classes=y_train_behaviour, output_loc=output_loc_images)
+                                 activity_classes=y_train_threat, output_loc=output_loc_images)
 
     EmotionGSOM.start()
     BehaviourGSOM.start()
@@ -179,7 +187,20 @@ if __name__ == "__main__":
                                 join(ThreatGSOM.output_save_location, 'final-threat-gsom_nodemap_SF-{}'.format(SF)))
 
 
-
+    # Test Behavior data
+    pred_emotion, generalise_emotion_features = EmotionGSOM.predict_x(X_test_emotion)
+    pred_behavior, generalise_behavior_features = BehaviourGSOM.predict_x(X_test_emotion)
+    
+    generalised_features = np.hstack(generalise_emotion_features, generalise_behavior_features)
+    y_pred = ThreatGSOM.predict(generalised_features)
+    ###### Calculate accuracy ###########
+    mat = confusion_matrix(y_test_threat, y_pred)
+    print(mat)
+    k = 0
+    for i in range(len(mat)):
+        k = k + mat[i][i]
+    acc = k / len(y_test_behaviour) * 100
+    print("Final_ Accuracy  :   ", acc)
     # label = np.load("data/behavior_label.npy")
     # emotion_label = np.where(label==5, 0, label)
     # emotion_label = np.where(label==6, 5, label)
