@@ -340,7 +340,7 @@ class AspectLearnerGSOM(threading.Thread):
             winner = Utils.Utilities.select_winner(gsom_nodemap, np.array([cur_input]))
             node_index = Utils.Utilities.generate_index(winner.x, winner.y)
             y_pred.append(winner.get_mapped_labels())
-            weights.append(winner.recurrent_weights)
+            weights.append(winner.recurrent_weights[0])
 
         return y_pred, weights
 
