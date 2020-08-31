@@ -8,6 +8,7 @@ import os
 from os.path import join
 from datetime import datetime
 from util import utilities as Utils
+from sklearn.metrics import confusion_matrix
 
 from core4.AspectLearnerGSOM import AspectLearnerGSOM
 from core4.AssociativeGSOM import AssociativeGSOM
