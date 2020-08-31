@@ -34,8 +34,8 @@ emotion_label = np.load("/content/drive/My Drive/Dataset/FEATURES/Train_features
 behaviour_label = np.load("/content/drive/My Drive/Dataset/FEATURES/Train_features/behavior_label.npy")
 threat_label = np.load("/content/drive/My Drive/Dataset/FEATURES/Train_features/threat_label.npy")
 
-test_behaviour_feature = np.load("/content/drive/My Drive/Dataset/FEATURES/Test_features/test_behavior.npy")
-test_behaviour_label = np.load("/content/drive/My Drive/Dataset/FEATURES/Test_features/test_behavior_labels.npy")
+test_behaviour_feature = np.load("/content/drive/My Drive/Dataset/FEATURES/Test_features/test_behaviour.npy")
+test_behaviour_label = np.load("/content/drive/My Drive/Dataset/FEATURES/Test_features/test_behaviour_labels.npy")
 test_emotion_feature = np.load("/content/drive/My Drive/Dataset/FEATURES/Test_features/test_emotion.npy")
 test_emotion_label = np.load("/content/drive/My Drive/Dataset/FEATURES/Test_features/test_emotion_labels.npy")
 test_threat_label = np.load("/content/drive/My Drive/Dataset/FEATURES/Test_features/test_threat_labels.npy")
